@@ -15,21 +15,21 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
-  # tracing: 
-  #   lambda: true
-  #   apiGateway: true
+  tracing: 
+    lambda: true
+    apiGateway: true
 
   environment:
-    # TODOS_TABLE: Serveless-c4-todo-app-1-${self:provider.stage}
-    GROUPS_TABLE: Serveless-c4-todo-app-1-${self:provider.stage}
+    TODOS_TABLE: Serveless-c4-todo-app-1-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-app-1-images-${self:provider:stage}
+    ATTACHMENT_S3_BUCKET: serverless-c4-todo-app-1-images-${self:provider.stage}
     SIGNED_URL_EXPIRATION: 300
     PROJECT_NAME: serverless-todo-app-1
     INDEX_NAME: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
   
-  # logs: 
-  #   restApi: true
+  logs: 
+    # Enable API Gateway logs
+    restApi: true
 
   # iam:
   #   role:
