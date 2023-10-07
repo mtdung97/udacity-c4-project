@@ -2,7 +2,7 @@ service: serverless-todo-app-1
 
 plugins:
   - serverless-iam-roles-per-function
-  - serverless-webpack
+  # - serverless-webpack
   - serverless-plugin-tracing
 
 frameworkVersion: '3.35.2'
@@ -15,18 +15,29 @@ provider:
   stage: ${opt:stage, 'dev'}
   region: ${opt:region, 'us-east-1'}
 
-  tracing: 
-    lambda: true
-    apiGateway: true
+  # tracing: 
+  #   lambda: true
+  #   apiGateway: true
 
   environment:
-    TODOS_TABLE: Todos-${self:provider.stage}
+    # TODOS_TABLE: Serveless-c4-todo-app-1-${self:provider.stage}
+    GROUPS_TABLE: Serveless-c4-todo-app-1-${self:provider.stage}
     TODOS_CREATED_AT_INDEX: CreatedAtIndex
-    ATTACHMENT_S3_BUCKET: serverless-c4-todo-images-${self:provider:stage}
+    ATTACHMENT_S3_BUCKET: serverless-c4-todo-app-1-images-${self:provider:stage}
     SIGNED_URL_EXPIRATION: 300
+    PROJECT_NAME: serverless-todo-app-1
+    INDEX_NAME: ${self:provider.environment.TODOS_CREATED_AT_INDEX}
   
-  logs: 
-    restApi: true
+  # logs: 
+  #   restApi: true
+
+  # iam:
+  #   role:
+  #     statements:
+  #       - Effect: Allow
+  #         Action:
+  #           - dynamodb:Scan
+  #         Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.GROUPS_TABLE}
 
   iam:
     role:
@@ -39,71 +50,79 @@ provider:
 
 functions:
 
+  # hello: 
+  #   handler: handler.hello
+  #   events: 
+  #     - http:
+  #         path: /
+  #         method: get
+  #         cors: true
+
   Auth:
     handler: src/lambda/auth/auth0Authorizer.handler
 
   # TODO: Configure this function
-  GetTodos:
-    handler: src/lambda/http/getTodos.handler
-    events:
-      - http:
-          method: get
-          path: todos
-          cors: true
-          authorizer: Auth
+  # GetTodos:
+  #   handler: src/lambda/http/getTodos.handler
+  #   events:
+  #     - http:
+  #         method: get
+  #         path: todos
+  #         cors: true
+  #         authorizer: Auth
 
   # TODO: Configure this function
-  CreateTodo:
-    handler: src/lambda/http/createTodo.handler
-    events:
-      - http:
-          method: post
-          path: todos
-          cors: true
-          authorizer: Auth
-          request: 
-            schemas: 
-              application/json: ${file(models/create-todo-model.json)}
+  # CreateTodo:
+  #   handler: src/lambda/http/createTodo.handler
+  #   events:
+  #     - http:
+  #         method: post
+  #         path: todos
+  #         cors: true
+  #         authorizer: Auth
+  #         request: 
+  #           schemas: 
+  #             application/json: ${file(models/create-todo-model.json)}
 
   # TODO: Configure this function
-  UpdateTodo:
-    handler: src/lambda/http/updateTodo.handler
-    events:
-      - http:
-          method: patch
-          path: todos/{todoId}
+  # UpdateTodo:
+  #   handler: src/lambda/http/updateTodo.handler
+  #   events:
+  #     - http:
+  #         method: patch
+  #         path: todos/{todoId}
 
   # TODO: Configure this function
-  DeleteTodo:
-    handler: src/lambda/http/deleteTodo.handler
-    events:
-      - http:
-          method: delete
-          path: todos/{todoId}
+  # DeleteTodo:
+  #   handler: src/lambda/http/deleteTodo.handler
+  #   events:
+  #     - http:
+  #         method: delete
+  #         path: todos/{todoId}
 
   # TODO: Configure this function
-  GenerateUploadUrl:
-    handler: src/lambda/http/generateUploadUrl.handler
-    events:
-      - http:
-          method: post
-          path: todos/{todoId}/attachment
+  # GenerateUploadUrl:
+  #   handler: src/lambda/http/generateUploadUrl.handler
+  #   events:
+  #     - http:
+  #         method: post
+  #         path: todos/{todoId}/attachment
 
 resources:
   Resources:
     # TODO: Add any necessary AWS resources
-    GatewayResponseDefault4xx:
-      Type: AWS:ApiGateway::GatewayResponse
-      Properties:
+    # GatewayResponseDefault4xx:
+    #   Type: AWS:ApiGateway::GatewayResponse
+    #   Properties:
     
-    TodosTable:
-      Type: AWS::DynamoDB::Table
-      Properties:
+    # TodosTable:
+    #   Type: AWS::DynamoDB::Table
+    #   Properties:
 
-    AttachmentsBucket:
-      Type: AWS::S3::Bucket
-      Properties:
+    # AttachmentsBucket:
+    #   Type: AWS::S3::Bucket
+    #   Properties:
     
-    BucketPolicy:
-      Type: AWS::S3::BucketPolicy
-      Properties:
+    # BucketPolicy:
+    #   Type: AWS::S3::BucketPolicy
+    #   Properties:
