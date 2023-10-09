@@ -1,7 +1,8 @@
-import * as AWS from 'aws-sdk'
-import * as AWSXray from 'aws-xray-sdk'
+import AWS from 'aws-sdk'
+import AWSXRay from 'aws-xray-sdk'
+import { createLogger } from '../utils/logger.mjs'
 
-const XAWS = AWSXray.captureAWS(AWS)
+const XAWS = AWSXRay.captureAWS(AWS)
 
 const logger = createLogger('TodoAccess')
 
@@ -42,7 +43,7 @@ export class TodosAccess {
 
     logger.info('Todo item created', result)
 
-    return result
+    return todoItem
   }
 
   async updateTodoItem(todoId, userId, todoUpdate) {

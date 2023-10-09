@@ -1,4 +1,4 @@
-import { createLogger } from '../../utils/logger.mjs'
+import { createLogger } from '../utils/logger.mjs'
 import * as uuid from 'uuid'
 import { AttachmentUtils } from '../fileStorage/attachmentUtils.mjs'
 import { TodosAccess } from '../dataLayer/todosAccess.mjs'
