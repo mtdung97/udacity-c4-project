@@ -1,3 +1,5 @@
+org: mtdung1997
+app: serverless-app
 service: serverless-app
 
 plugins:
@@ -34,7 +36,7 @@ provider:
     role:
       statements:
         - Effect: Allow
-          Action: 
+          Action:
             - xray:PutTelemetryRecords
             - xray:PutTraceSegments
           Resource: "*"
@@ -45,14 +47,29 @@ functions:
     handler: src/lambda/auth/auth0Authorizer.handler
 
   # TODO: Configure this function
-  # GetTodos:
-  #   handler: src/lambda/http/getTodos.handler
-  #   events:
-  #     - http:
-  #         method: get
-  #         path: todos
-  #         cors: true
-  #         authorizer: Auth
+  GetTodos:
+    handler: src/lambda/http/getTodos.handler
+    events:
+      - http:
+          method: get
+          path: todos
+          cors: true
+          authorizer: Auth
+    iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-get-todo-role-${self:provider.stage}
+    iamRoleStatements:
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}
+      - Effect: Allow
+        Action:
+          - dynamodb:Query
+        Resource: arn:aws:dynamodb:${self:provider.region}:*:table/${self:provider.environment.TODOS_TABLE}/index/${self:provider.environment.TODOS_CREATED_AT_INDEX}
+      - Effect: Allow
+        Action:
+          - xray:PutTraceSegments
+        Resource:
+          - '*'
 
   # TODO: Configure this function
   CreateTodo:
@@ -62,10 +79,10 @@ functions:
           method: post
           path: todos
           cors: true
-  #         authorizer: Auth
-  #         request: 
-  #           schemas: 
-  #             application/json: ${file(models/create-todo-model.json)}
+          # authorizer: Auth
+          # request: 
+          #   schemas: 
+          #     application/json: ${file(models/create-todo-model.json)}
     iamRoleStatementsName: ${self:provider.environment.PROJECT_NAME}-create-todo-role-${self:provider.stage}
     iamRoleStatements:
       - Effect: Allow
@@ -123,7 +140,7 @@ resources:
           gatewayresponse.header.Access-Control-Allow-Origin: "'*'"
           gatewayresponse.header.Access-Control-Allow-Headers: "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token'"
           gatewayresponse.header.Access-Control-Allow-Methods: "'GET,OPTIONS,POST'"
-        ResponseType: DEFAULT_4XX
+        ResponseType: DEFAULT_5XX
         RestApiId:
           Ref: ApiGatewayRestApi
     
