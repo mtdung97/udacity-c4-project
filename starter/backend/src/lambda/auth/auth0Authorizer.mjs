@@ -58,16 +58,16 @@ async function verifyToken(authHeader) {
 
   if (!signingKeys) {
     throw new Error('The JWKS endpoints did not contain any keys')
-  } 
+  }
 
   // get pem  data
   const pemData = signingKeys.x5c[0]
 
   // convert pem data to cert
-  const cert = `-----BEGIN CERTIFICATE-----\n${pemData}\n----- END CERTIFICATE-----`
+  const cert = `-----BEGIN CERTIFICATE-----\n${pemData}\n-----END CERTIFICATE-----`
 
   // verify token
-  const verifiedToken = jsonwebtoken.verify(token, cert, { algorithms: ['RS256']})
+  const verifiedToken = jsonwebtoken.verify(token, cert, { algorithms: ['RS256'] })
   logger.info('verifiedToken', verifiedToken)
 
   return verifiedToken

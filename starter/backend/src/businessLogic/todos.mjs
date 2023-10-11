@@ -10,7 +10,7 @@ const todosAccess = new TodosAccess()
 // write get todos function
 export async function getTodosForUser(userId) {
   logger.info('Get todos function called')
-  return await todosAccess.getAllTodos(userId)
+  return todosAccess.getAllTodos(userId)
 }
 
 // write create todo function
@@ -30,4 +30,25 @@ export async function createTodo(newTodo, userId) {
   }
 
   return await todosAccess.createTodoItem(newItem)
+}
+
+// write update todo function 
+export async function updateTodo(userId, todoId, todoUpdate) {
+  logger.info('Update todo function called')
+
+  return todosAccess.updateTodoItem(userId, todoId, todoUpdate)
+}
+
+// write delete todo function 
+export async function deleteTodo(todoId, userId) {
+  logger.info('Delete todo function called')
+
+  return todosAccess.deleteTodoItem(todoId, userId)
+}
+
+// write generate upload url function 
+export async function createAttachmentPresignedUrl(todoId, userId) {
+  logger.info('Create attachment function called by used', todoId, userId)
+
+  return attachmentUtils.getUploadUrl(todoId)
 }
