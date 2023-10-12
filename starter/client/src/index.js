@@ -7,12 +7,13 @@ import './index.css'
 
 const domain = process.env.REACT_APP_AUTH0_DOMAIN
 const clientId = process.env.REACT_APP_AUTH0_CLIENT_ID
+const callbackUrl = process.env.REACT_APP_CALLBACK_URL
 
 ReactDOM.render(
   <Auth0Provider
     domain={domain}
     clientId={clientId}
-    redirectUri={window.location.origin}
+    redirectUri={callbackUrl}
     audience={`https://${domain}/api/v2/`}
     scope="read:todo write:todo delete:todo"
   >
